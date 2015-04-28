@@ -29,7 +29,7 @@ angularHash.factory('hashService', ['$rootScope', '$location', function ($rootSc
             for (var i = 1; i < arguments.length; i++) {
                 if (i % 2 == 1) {
                     var paramName = arguments[i - 1];
-                    var paramValue = argument[i];
+                    var paramValue = arguments[i];
                     if(i != 1) {
                         newHash+="&"
                     }
@@ -42,6 +42,7 @@ angularHash.factory('hashService', ['$rootScope', '$location', function ($rootSc
             hashService.broadcastHashChange(newHash);
         } else {
             hashService.lastHash = newHash;
+            $location.hash(newHash);
         }
     };
 
