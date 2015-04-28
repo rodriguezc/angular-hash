@@ -2,7 +2,17 @@ var angularHash = angular.module('angularHash', []);
 
 angularHash.factory('hashService', ['$rootScope', '$location', function ($rootScope, $location) {
 
-    var hashService = {};
+    var hashService = {listeners :[]};
+
+
+
+    hashService.register = function (callback) {
+        hashService.listeners.push(callback);
+    };
+
+    hashService.unregister = function (callback) {
+        hashService.listeners.remove(callback);
+    };
 
     hashService.broadcastHashChange = function (hashValue) {
         var hashObj = {};
@@ -20,29 +30,40 @@ angularHash.factory('hashService', ['$rootScope', '$location', function ($rootSc
             var paramNameValue = parameter.split("=");
             hashObj[paramNameValue[0]] = paramNameValue[1];
         }
-        $rootScope.$broadcast("hashChange", hashObj);
+        for(var i = 0; i < hashService.listeners.length; i++) {
+            var listener = hashService.listeners[i];
+            listener(hashObj);
+        }
+
+
+        //  $rootScope.$broadcast("hashChange", hashObj);
     };
 
     hashService.update = function () {
-        var newHash ="";
+        var newHash = "";
         if (arguments.length > 1) {
             for (var i = 1; i < arguments.length; i++) {
                 if (i % 2 == 1) {
                     var paramName = arguments[i - 1];
                     var paramValue = arguments[i];
-                    if(i != 1) {
-                        newHash+="&"
+                    if (i != 1) {
+                        newHash += "&"
                     }
-                    newHash+=paramName+"="+paramValue;
+                    newHash += paramName + "=" + paramValue;
                 }
             }
         }
 
-        if(newHash == hashService.lastHash) {
+        if (newHash == hashService.lastHash) {
             hashService.broadcastHashChange(newHash);
         } else {
             hashService.lastHash = newHash;
-            $location.hash(newHash);
+
+            if(newHash == "") {
+                $location.hash("#");
+            } else {
+                $location.hash(newHash);
+            }
         }
     };
 
