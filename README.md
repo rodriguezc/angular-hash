@@ -1,5 +1,5 @@
 # #angular-hash #
-Watch for hash Change
+AngularJS service for watch and update URL hash
 
 ## Install ##
 Install using [Bower](http://bower.io/):
