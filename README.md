@@ -18,7 +18,7 @@ var myApp = angular.module('myApp', ['angularHash']);
 esbEyeApp.controller('MyCtrl', 'hashService', function (hashService) ...
 ```
 
--Register callback on watch change
+-Register callback on URL hash change
 ```
  hashService.register(function (hashObj) {
         var environment = hashObj.environment;
@@ -27,7 +27,7 @@ esbEyeApp.controller('MyCtrl', 'hashService', function (hashService) ...
     });
 ```
 
--Update the hash when needed. The callback above will be called even if the hash has the same value than before
+-Update the URL hash. The callback above will be called even if the hash has the same value than before
 ```
    $scope.onTabSelect = function (tab) {
         hashService.update("environment", tab.environment, "page", tab.page);
